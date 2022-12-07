@@ -1,5 +1,5 @@
 pipeline {
-    agent {label 'DPTUSIGPRODIL01' }
+    agent none
     
     tools {
         jdk 'Java JDK'
@@ -22,18 +22,39 @@ pipeline {
         stage('build-clone') {
             steps {
                 echo 'This is the clone stage'
-				git branch: 'master',
+				git branch: 'main',
    			    credentialsId: CRED,
-    			url: 'https://github.com/massmutual/auto_java_smart_test_automation.git'
+    			url: 'https://github.com/vkundanapally26-mm/Docker_Jenkins.git'
     		}
         }
-		
+		stage('Maven Install') {
+    	agent {
+      	docker {
+        	image 'maven:3.5.0'
+        }
+      }
+      steps {
+      	sh 'mvn clean install'
+      }
+    }
+    
+    stage('Docker Up') {
+    	agent {
+      	docker {
+        	image 'maven:3.5.0'
+        }
+      }
+      steps {
+      	sh 'docker-compose up'
+      }
+    }
+    
 		stage('build-test') {
             steps {
                 echo 'This is the maven test stage'
                 script {
                                           
-				        bat 'mvn test -Dcucumber.options=" --tags @TestAutomationScenario1"'
+				        bat 'mvn test -Dcucumber.options=" --tags @TryIt"'
 				        echo "Test completed build-test"
 				    
                 }
@@ -49,12 +70,12 @@ pipeline {
         
         success ("JOB SUCCESS"){
             echo "Success Job"
-			emailext attachmentsPattern: '**TestResults/**/*.html', body: 'Hi Team,\n\n Please find the attached test summary results.\n\n http://vrflx12031:8080/job/${JOB_NAME}/${BUILD_NUMBER}/HTML_Report_1/ \n\n Thanks, \n Automation Team.\n\n This is auto generated email', from: 'nmadshetty40@massmutual.com', subject: 'Test results Success - Smart Test Automation Pipeline', to: 'nmadshetty40@massmutual.com'
+			emailext attachmentsPattern: '**TestResults/**/*.html', body: 'Hi Team,\n\n Please find the attached test summary results.\n\n http://vrflx12031:8080/job/${JOB_NAME}/${BUILD_NUMBER}/HTML_Report_1/ \n\n Thanks, \n Automation Team.\n\n This is auto generated email', from: 'vkundanapally26@massmutual.com', subject: 'Test results Success - Smart Test Automation Pipeline', to: 'vkundanapally26@massmutual.com'
         }
 
         failure ("JOB FAILURE"){
             echo "Failure Job"
-            emailext attachmentsPattern: '**TestResults/**/*.html', body: 'Hi Team,\n\n Please find the attached test summary results.\n\n http://vrflx12031:8080/job/${JOB_NAME}/${BUILD_NUMBER}/HTML_Report_1/ \n\n Thanks, \n Automation Team.\n\n This is auto generated email', from: 'nmadshetty40@massmutual.com', subject: 'Test results Failed - Smart Test Automation Pipeline', to: 'nmadshetty40@massmutual.com'
+            emailext attachmentsPattern: '**TestResults/**/*.html', body: 'Hi Team,\n\n Please find the attached test summary results.\n\n http://vrflx12031:8080/job/${JOB_NAME}/${BUILD_NUMBER}/HTML_Report_1/ \n\n Thanks, \n Automation Team.\n\n This is auto generated email', from: 'vkundanapally26@massmutual.com', subject: 'Test results Failed - Smart Test Automation Pipeline', to: 'vkundanapally26@massmutual.com'
         }
    
         unstable ("JOB UNSTABLE") {
