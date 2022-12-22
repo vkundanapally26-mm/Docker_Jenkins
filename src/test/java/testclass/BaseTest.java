@@ -39,7 +39,7 @@ public class BaseTest extends AbstractTestNGCucumberTests
 	
 	@BeforeClass
 	public static void setupAllureReports() throws IOException, InterruptedException {
-		CommonFunctions.runTerminalCommand("docker-compose up", "Registered a node");
+		//CommonFunctions.runTerminalCommand("docker-compose up", "Registered a node");
 		System.out.println("Node Up");
 		// Runtime.getRuntime().exec("cmd.exe /c start start_dockergrid.bat");
 		//Thread.sleep(20000);

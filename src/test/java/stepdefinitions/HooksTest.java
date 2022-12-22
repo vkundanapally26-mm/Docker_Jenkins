@@ -53,10 +53,10 @@ public class HooksTest{
 	      //  System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/driver/chromedriver.exe");
 	        //Configuration.browser=testPropertyFileRead.getThePropertyValue("Browser");
 	        crossBrowsing();
-//	        ChromeOptions options = new ChromeOptions();
+	        ChromeOptions options = new ChromeOptions();
 //	        //options.addArguments("--incognito");
-//	        options.addArguments("ignore-certificate-errors", "ignore-urlfetcher-cert-requests");
-//	        Configuration.browserCapabilities.setCapability(ChromeOptions.CAPABILITY, options);
+	        options.addArguments("ignore-certificate-errors", "ignore-urlfetcher-cert-requests");
+	        Configuration.browserCapabilities.setCapability(ChromeOptions.CAPABILITY, options);
 			prop = System.getProperty("env");
 			beforeTests(prop);
 			
